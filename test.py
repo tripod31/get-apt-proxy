@@ -19,9 +19,9 @@ class Test1(unittest.TestCase):
         出力を見るだけ。テストではない
         """
         ret,stdout,stderr = exec_command("./get_apt_proxy.py")
-        if len(stdout)>0:
+        ip = stdout.rstrip()
+        if len(ip)>0:
             #サーバが起動している場合
-            ip = stdout.rstrip()
             print(f"acngサーバー({ip})は起動しています")
         else:
             #サーバが起動していない場合

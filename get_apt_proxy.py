@@ -42,7 +42,10 @@ class Process:
             ip=self.get_ip()
         except Exception as e:
             print(e,file=sys.stderr)
-        print(f"http://{ip}.local:3142")
+        if len(ip)>0:
+            print(f"http://{ip}.local:3142")
+        else:
+            print("")
 
 if __name__ == '__main__':
     obj = Process()
