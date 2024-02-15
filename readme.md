@@ -1,6 +1,9 @@
 # get-apt-proxy
+avahi-browseコマンドでapt-cacher-ngサーバーを見つける  
 apt-cacher-ngサーバーをaptのプロキシサーバーに設定する  
 apt-cacher-ngサーバーがip.localのアドレスで接続できることが必要
+
+ubuntuでは以上の用途でsquid-deb-proxy-clientパッケージを使用しています。MXLinuxではそのパッケージがなかったため自作しました。
 
 ## 動作確認環境
 MXLinux23.2  
