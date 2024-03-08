@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-avahi-browseコマンドでacngサーバーIPアドレスを得る
-"http://アドレス.local:3142"を出力。アドレスが得られない場合何も出力しない
+avahi-browseコマンドでacngサーバーIPアドレスを取得して、接続をテストする
+アドレスが取得できた場合、"http://アドレス.local:3142"を出力。アドレスが取得できない場合何も出力しない
 """
 
 import sys
 import subprocess
 import re
+import requests
 
 def exec_command(cmd,encoding="utf-8",env=None):
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,env=env)
@@ -17,6 +18,23 @@ class Process:
 
     def __init__(self):
         pass
+
+    def get_url(self,ip):
+        """
+        apt-cacher-ngサーバーのURLを返す
+        """
+        return f"http://{ip}.local:3142"
+
+    def test_connect(self,ip):
+        """
+        接続テスト
+        :returns:   True：成功/False：失敗
+        """
+        ret = False
+        res = requests.get(self.get_url(ip))
+        if res.status_code == 406:
+            ret = True
+        return ret
 
     def get_ip(self):
         """
@@ -31,9 +49,14 @@ class Process:
         
         line = stdout.split('\n')[0]
         m=re.search(r"apt-cacher-ng proxy on (\S+)",line)
-        if m:        
+        if m:      
             ip = m.group(1)
+        else:
+            return ""
 
+        if not self.test_connect(ip):
+            ip = ""
+        
         return ip
 
     def main(self):
@@ -41,9 +64,10 @@ class Process:
         try:
             ip=self.get_ip()
         except Exception as e:
-            print(e,file=sys.stderr)
+            #print(e,file=sys.stderr)
+            pass
         if len(ip)>0:
-            print(f"http://{ip}.local:3142")
+            print(self.get_url(ip))
         else:
             print("")
 
