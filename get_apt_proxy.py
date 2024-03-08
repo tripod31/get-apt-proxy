@@ -41,23 +41,19 @@ class Process:
         avahi-browseコマンドでacngサーバーIPを得る
         :returns:   見つかった場合：IP、見つからない場合:""
         """
-        ip = ""
+        ret_val = ""
         retcode,stdout,stderr = exec_command("avahi-browse -t _apt_proxy._tcp|grep apt-cacher-ng")
-        if len(stdout)==0:
-            #acngサーバーが見つからない
-            return ""
+        if len(stdout)>0:        
+            lines = stdout.split('\n')
+            for line in lines:
+                m=re.search(r"apt-cacher-ng proxy on (\S+)",line)
+                if m:      
+                    ip = m.group(1)
+                    if self.test_connect(ip):
+                        ret_val = ip
+                        break
         
-        line = stdout.split('\n')[0]
-        m=re.search(r"apt-cacher-ng proxy on (\S+)",line)
-        if m:      
-            ip = m.group(1)
-        else:
-            return ""
-
-        if not self.test_connect(ip):
-            ip = ""
-        
-        return ip
+        return ret_val
 
     def main(self):
         ip = ""
