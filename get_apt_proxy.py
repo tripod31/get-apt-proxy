@@ -7,7 +7,7 @@ avahi-browseコマンドでacngサーバーIPアドレスを取得して、接�
 import sys
 import subprocess
 import re
-import requests
+import socket
 
 def exec_command(cmd,encoding="utf-8",env=None):
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,env=env)
@@ -19,21 +19,25 @@ class Process:
     def __init__(self):
         pass
 
-    def get_url(self,ip):
+    def get_url(self,host):
         """
         apt-cacher-ngサーバーのURLを返す
         """
-        return f"http://{ip}.local:3142"
+        return f"http://{host}.local:3142"
 
-    def test_connect(self,ip):
+    def test_connect(self,host):
         """
         接続テスト
         :returns:   True：成功/False：失敗
         """
         ret = False
-        res = requests.get(self.get_url(ip))
-        if res.status_code == 406:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            client.connect((host,3142))
             ret = True
+        except Exception as e:
+            #print(e)
+            pass
         return ret
 
     def get_ip(self):
@@ -48,9 +52,9 @@ class Process:
             for line in lines:
                 m=re.search(r"apt-cacher-ng proxy on (\S+)",line)
                 if m:      
-                    ip = m.group(1)
-                    if self.test_connect(ip):
-                        ret_val = ip
+                    host = m.group(1)
+                    if self.test_connect(f"{host}.local"):
+                        ret_val = host
                         break
         
         return ret_val

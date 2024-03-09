@@ -9,9 +9,6 @@ ubuntuでは以上の用途でsquid-deb-proxy-clientパッケージを使用し�
 MXLinux23.2  
 python3.11.2
 
-## 必要ライブラリ
-requests
-
 ## get_apt_proxy.py
 avahi-bowseコマンドでapt-cacher-ngサーバーを見つけ、接続をテストする。  
 見つかった場合：  
