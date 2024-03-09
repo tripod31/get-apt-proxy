@@ -35,9 +35,11 @@ class Process:
         try:
             client.connect((host,3142))
             ret = True
+            client.close()
         except Exception as e:
             #print(e)
             pass
+
         return ret
 
     def get_ip(self):
