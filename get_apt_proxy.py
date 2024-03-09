@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-avahi-browseコマンドでacngサーバーIPアドレスを取得して、接続をテストする
-アドレスが取得できた場合、"http://アドレス.local:3142"を出力。アドレスが取得できない場合何も出力しない
+avahi-browseコマンドでacngサーバーのhost名を取得して、接続をテストする
+ホスト名が取得できた場合、"http://ホスト名.local:3142"を出力。ホスト名が取得できない場合何も出力しない
 """
 
 import sys
@@ -9,21 +9,15 @@ import subprocess
 import re
 import socket
 
-def exec_command(cmd,encoding="utf-8",env=None):
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,env=env)
+def exec_command(cmd):
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout_data, stderr_data = p.communicate()
-    return p.returncode,stdout_data.decode(encoding),stderr_data.decode(encoding)
+    return p.returncode,stdout_data.decode(),stderr_data.decode()
 
 class Process:
 
     def __init__(self):
         pass
-
-    def get_url(self,host):
-        """
-        apt-cacher-ngサーバーのURLを返す
-        """
-        return f"http://{host}.local:3142"
 
     def test_connect(self,host):
         """
@@ -33,18 +27,18 @@ class Process:
         ret = False
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            client.connect((host,3142))
+            ip = socket.gethostbyname(host)
+            client.connect((ip,3142))
             ret = True
             client.close()
         except Exception as e:
-            #print(e)
-            pass
+            print(e,file=sys.stderr)
 
         return ret
 
-    def get_ip(self):
+    def get_host(self):
         """
-        avahi-browseコマンドでacngサーバーIPを得る
+        avahi-browseコマンドでacngサーバーのhost名を得る
         :returns:   見つかった場合：IP、見つからない場合:""
         """
         ret_val = ""
@@ -62,14 +56,13 @@ class Process:
         return ret_val
 
     def main(self):
-        ip = ""
+        host = ""
         try:
-            ip=self.get_ip()
+            host=self.get_host()
         except Exception as e:
-            #print(e,file=sys.stderr)
-            pass
-        if len(ip)>0:
-            print(self.get_url(ip))
+            print(e,file=sys.stderr)
+        if len(host)>0:
+            print(f"http://{host}.local:3142")
         else:
             print("")
 
