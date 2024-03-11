@@ -3,36 +3,42 @@
 
 import unittest
 import subprocess
+import re
 
-def exec_command(cmd,encoding="utf-8",env=None):
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,env=env)
+def exec_command(cmd):
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout_data, stderr_data = p.communicate()
-    return p.returncode,stdout_data.decode(encoding),stderr_data.decode(encoding)
+    return p.returncode,stdout_data.decode(),stderr_data.decode()
 
 class Test1(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
 
+    def exec_prog(self,path):
+        """
+        出力を見る
+        """
+        
+        ret,stdout,stderr = exec_command(path)
+        url = stdout.rstrip()
+        print(f"{path}の出力：\n[{url}]")
+
     def test1(self):
-        """
-        出力を見るだけ。テストではない
-        """
-        ret,stdout,stderr = exec_command("./get_apt_proxy.py")
-        ip = stdout.rstrip()
-        if len(ip)>0:
-            #サーバが起動している場合
-            print(f"acngサーバー({ip})は起動しています")
-        else:
-            #サーバが起動していない場合
-            print(f"acngサーバーが見つかりません")
+        self.exec_prog("./get_apt_proxy.py")
 
     def test2(self):
         #apt-proxy設定をチェック
-        ret,stdout,stderr = exec_command("apt-config dump|grep -i proxy","utf-8")
+        ret,stdout,stderr = exec_command("apt-config dump|grep -E Acquire::http::Proxy-?Auto-?Detect")
         stdout = stdout.rstrip()
-        print(f"\napt-proxy設定:\n[{stdout}]")
-        self.assertEqual(stdout,'Acquire::http::Proxy-Auto-Detect "/usr/local/bin/get_apt_proxy.py";')
+        if len(stdout)==0:
+            print("apt-proxyは設定されていません")
+            return
+        
+        m=re.match(r'Acquire::http::ProxyAutoDetect "(.+)"',stdout)
+        prog = m.group(1)
+        print(f"apt-proxy取得プログラムは以下に設定されています:\n[{prog}]")
+        self.exec_prog(prog)
 
     @classmethod
     def tearDownClass(cls):

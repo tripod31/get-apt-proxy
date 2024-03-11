@@ -38,8 +38,8 @@ class Process:
 
     def get_host(self):
         """
-        avahi-browseコマンドでacngサーバーのhost名を得る
-        :returns:   見つかった場合：IP、見つからない場合:""
+        avahi-browseコマンドでacngサーバーのホスト名を得る
+        :returns:   見つかった場合：ホスト名、見つからない場合:""
         """
         ret_val = ""
         retcode,stdout,stderr = exec_command("avahi-browse -t _apt_proxy._tcp|grep apt-cacher-ng")
