@@ -4,7 +4,7 @@ import os
 
 FILES = (
     "/usr/local/bin/get_apt_proxy.py",
-    "/etc/apt/apt.conf.d/90acng"
+    "/etc/apt/apt.conf.d/20acng"
     )
 
 for file in FILES:
