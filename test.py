@@ -35,7 +35,7 @@ class Test1(unittest.TestCase):
             print("apt-proxyは設定されていません")
             return
         
-        m=re.match(r'Acquire::http::ProxyAutoDetect "(.+)"',stdout)
+        m=re.match(r'Acquire::http::Proxy-?Auto-?Detect "(.+)"',stdout)
         prog = m.group(1)
         print(f"apt-proxy取得プログラムは以下に設定されています:\n[{prog}]")
         self.exec_prog(prog)

@@ -63,8 +63,6 @@ class Process:
             print(e,file=sys.stderr)
         if len(host)>0:
             print(f"http://{host}.local:3142")
-        else:
-            print("")
 
 if __name__ == '__main__':
     obj = Process()
