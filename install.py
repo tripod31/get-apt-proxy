@@ -4,7 +4,7 @@ import shutil
 import os
 
 shutil.copy("get_apt_proxy.py",         "/usr/local/bin/")
-with open("/etc/apt/apt.conf.d/20acng","w") as f:
+with open("/etc/apt/apt.conf.d/01acng","w") as f:
     f.write('Acquire::http::Proxy-Auto-Detect "/usr/local/bin/get_apt_proxy.py";\n')
 
 #disable auto-apt-proxy

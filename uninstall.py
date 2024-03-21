@@ -5,7 +5,7 @@ import shutil
 
 FILES = (
     "/usr/local/bin/get_apt_proxy.py",
-    "/etc/apt/apt.conf.d/20acng"
+    "/etc/apt/apt.conf.d/01acng"
     )
 
 for file in FILES:
