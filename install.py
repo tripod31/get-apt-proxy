@@ -4,7 +4,7 @@ import shutil
 import os
 
 def install():
-    shutil.copy("get_apt_proxy.py", "/usr/local/bin/")
+    shutil.copy("get-apt-proxy.py", "/usr/local/bin/")
     shutil.copy("01acng",           "/etc/apt/apt.conf.d/")
 
     #disable auto-apt-proxy

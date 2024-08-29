@@ -4,7 +4,7 @@ import os
 import shutil
 
 FILES = (
-    "/usr/local/bin/get_apt_proxy.py",
+    "/usr/local/bin/get-apt-proxy.py",
     "/etc/apt/apt.conf.d/01acng"
 )
 

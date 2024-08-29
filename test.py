@@ -25,7 +25,7 @@ class Test1(unittest.TestCase):
         print(f"{path}の出力：\n[{url}]")
 
     def test1(self):
-        self.exec_prog("./get_apt_proxy.py")
+        self.exec_prog("./get-apt-proxy.py")
 
     def test2(self):
         #apt-proxy設定をチェック

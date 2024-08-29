@@ -9,7 +9,7 @@ ubuntuでは以上の用途でsquid-deb-proxy-clientパッケージを使用し�
 MXLinux23.2  
 python3.11.2
 
-## get_apt_proxy.py
+## get-apt-proxy.py
 avahi-bowseコマンドでapt-cacher-ngサーバーを見つけ、接続をテストする。  
 見つかった場合：  
 http://アドレス.local:3142を出力  
@@ -21,12 +21,12 @@ apt-browseコマンドをインストール
 ```
 $sudo apt install avahi-utils
 ```
-aptにget_apt_proxy.pyを登録  
+aptにget-apt-proxy.pyを登録  
 ```
 $sudo install.py
 ```
 ## アンインストール
-aptからget_apt_proxy.pyを登録解除  
+aptからget-apt-proxy.pyを登録解除  
 ```
 $sudo uninstall.py
 ```
