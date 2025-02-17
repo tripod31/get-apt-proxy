@@ -9,11 +9,6 @@ import subprocess
 import re
 import socket
 
-def exec_command(cmd):
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout_data, stderr_data = p.communicate()
-    return p.returncode,stdout_data.decode(),stderr_data.decode()
-
 class Process:
 
     def __init__(self):
@@ -42,9 +37,9 @@ class Process:
         :returns:   見つかった場合：ホスト名、見つからない場合:""
         """
         ret_val = ""
-        retcode,stdout,stderr = exec_command("avahi-browse -t _apt_proxy._tcp|grep apt-cacher-ng")
-        if len(stdout)>0:        
-            lines = stdout.split('\n')
+        res = subprocess.run("avahi-browse -t _apt_proxy._tcp|grep apt-cacher-ng",shell=True,capture_output=True,text=True)
+        if len(res.stdout)>0:
+            lines = res.stdout.split('\n')
             for line in lines:
                 m=re.search(r"apt-cacher-ng proxy on (\S+)",line)
                 if m:      
